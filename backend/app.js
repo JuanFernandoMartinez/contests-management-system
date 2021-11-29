@@ -76,44 +76,12 @@ let searchUser = (emailHashed) => {
 }
 
 
-let authenticate = async(email, password) => {
-    
-    const response = await pool.query('SELECT * FROM userRPC');
 
-    for (let i = 0; i < users.length; i++) {
-        if (email === users[i].email) {
-            if (password === usersObjects[i].password) {
-                if (usersObjects[i].verified)
-                    return true;
-            } else
-                return false;
-        }
-    }
-    return false;
-}
 
-let getUserByNickname = (nickname) => {
-    for (let i = 0; i < usersObjects.length; i++) {
-        if (usersObjects[i].nickname === nickname)
-            return usersObjects[i];
-    }
-    return null
-}
 
-let getUserByEmail = (email) => {
-    for (let i = 0; i < usersObjects.length; i++) {
-        if (usersObjects[i].email === email)
-            return usersObjects[i];
-    }
-    return null
-}
 
-let addUsers = async(email, password, nickname, firstName, lastName, country, verified) => {
 
-    const response = await pool.query("INSERT INTO userRPC (email,password, nickname, firstname, lastname, country, verified ) VALUES ($1,$2,$3,$4,$5,$6,$7)" , [email, password, nickname, firstName, lastName, country, verified]);
-    
-    console.log(response);
-}
+
 
 const app = express();
 
@@ -215,6 +183,31 @@ app.get("/activate/:id", (req, res) => {
 app.get("/users", async (req, res) => {
     let users = await pool.query('SELECT * usuarios');
     res.json(users.rows)
+})
+
+
+let codeGenerator = (n)=>{
+    let code = ""
+    for (let i = 0; i < n; i++) {
+        let num = parseInt(Math.random()*(10-0)+0);
+        code += num.toString()
+    }
+
+    return code;
+    
+}
+
+
+app.post("/recuperation/password/email", (req,res)=>{
+    //enviar correo electrónico
+    res.json({
+        msg: req.body.email,
+        code: codeGenerator(6)
+    })
+})
+
+app.post("/recuperation/password/code", (req,res)=> {
+    
 })
 
 app.get("/list", (req, res) => {
