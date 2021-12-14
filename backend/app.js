@@ -408,7 +408,7 @@ let codeGenerator = (n) => {
 
 }
 
-
+let code = codeGenerator(6)
 
 app.post("/recuperation/password/email", async (req,res)=>{
     //enviar correo electrónico
@@ -417,6 +417,10 @@ app.post("/recuperation/password/email", async (req,res)=>{
     if ((await response).rows.length > 0){
 
         let email = req.body.email
+        console.log(code)
+
+        sendEmailPasswordRecovery(email, code)
+
 
         res.json({
             flag: true,
@@ -435,6 +439,25 @@ app.post("/recuperation/password/email", async (req,res)=>{
 })
 
 app.post("/recuperation/password/code", (req, res) => {
+
+
+    let codetemp = req.body.code
+
+    console.log(codetemp)
+
+    if(codetemp==code){
+
+        res.json({flag: false,
+        })
+
+    }else{
+
+        res.json({
+            flag: true,
+        })
+
+    }
+
 
 
 })
