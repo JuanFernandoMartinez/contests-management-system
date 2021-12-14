@@ -413,7 +413,7 @@ let codeGenerator = (n) => {
 app.post("/recuperation/password/email", async (req,res)=>{
     //enviar correo electrónico
 
-    let response =  await pool.query("SELECT * FROM usuario WHERE email = $1", [req.body.email])
+    let response =  await pool.query("SELECT * FROM usuario WHERE correouser = $1", [req.body.email])
     if ((await response).rows.length > 0){
 
         let email = req.body.email
